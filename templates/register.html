@@ -1,0 +1,65 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <div class="content-section"> 
+    <h1>{{ pagename }}</h1>
+        <form action="" method="POST">
+            <p id="success">{{ gradescope }}</p>
+            <!--<input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            {{ form.hidden_tag() }}-->
+            {{ form.csrf_token }}
+            <fieldset class ="form-group"> 
+                <div class="form-group"> 
+                    {{ form.uname.label(class="form-control-label") }}
+
+                    {% if form.uname.errors %}
+                        {{ form.uname(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.uname.errors %}
+                                <span>{{error}}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.uname(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group"> 
+                    {{ form.twofa.label(class="form-control-label") }}
+
+                    {% if form.twofa.errors %}
+                        {{ form.twofa(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.twofa.errors %}
+                                <span>{{error}}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.twofa(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group"> 
+                    {{ form.pword.label(class="form-control-label") }}
+
+                    {% if form.pword.errors %}
+                        {{ form.pword(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.pword.errors %}
+                                <span>{{error}}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.pword(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <!--<input type="hidden" id="2fa"> -->
+                
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+        </form>
+    </div>
+    <div class="form-group">
+        Already Registered? <a class="ml-2" href="{{ url_for('login') }}">Login</a>
+    </div>
+{% endblock content %}
+

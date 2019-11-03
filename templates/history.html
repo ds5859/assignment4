@@ -1,0 +1,31 @@
+
+
+{% extends 'layout.html' %}
+{% block content %}
+    <div class="content-section"> 
+    <h1>{{ pagename }}</h1>
+        <form action="" method="POST">
+            {{ form.csrf_token }}
+            <fieldset class ="form-group"> 
+                <div class="form-group"> 
+                    {{ form.userquery.label(class="form-control-label") }}
+
+                    {% if form.userquery.errors %}
+                        {{ form.userquery(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.userquery.errors %}
+                                <span>{{error}}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.userquery(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+        </form>
+    </div>
+{% endblock content %}
+

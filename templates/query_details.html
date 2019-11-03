@@ -1,0 +1,16 @@
+
+
+{% extends 'layout.html' %}
+{% block content %}
+    <div class="content-section"> 
+    <h1>{{ pagename }}</h1>
+        <div>
+            {% for entry in query %}
+                <p id=queryid>Query Entry: {{ entry.id }}</p>
+                <p id=username>User Name: {{ entry.username }}</p>
+                <p id=querytext>Query Text: {{ entry.querytext }}</p>
+                <p id=queryresults>Query Results: {{ entry.queryresults }}</p>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock content %}

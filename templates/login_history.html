@@ -1,0 +1,39 @@
+
+
+{% extends 'layout.html' %}
+{% block content %}
+    <div class="content-section"> 
+    <h1>{{ pagename }}</h1>
+        <form action="" method="POST">
+            {{ form.csrf_token }}
+            <fieldset class ="form-group"> 
+                <div class="form-group"> 
+                    {{ form.userid.label(class="form-control-label") }}
+
+                    {% if form.userid.errors %}
+                        {{ form.userid(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.userid.errors %}
+                                <span>{{error}}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.userid(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+            <div>
+                {% for entry in history %}
+                        <p id=login{{entry.logid}}>Log Entry: {{ entry.id }}</p>
+                        <p>User Name: {{ entry.username }}</p>
+                        <p id=login{{entry.logid}}_time>Logout Time: {{ entry.logintime }}</p>
+                        <p id=logout{{entry.logid}}_time>Logout Time: {{ entry.logouttime if (entry.logouttime) else 'N/A' }}</p>
+                {% endfor %}
+            </div>
+        </form>
+    </div>
+{% endblock content %}
+

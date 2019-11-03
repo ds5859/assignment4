@@ -1,0 +1,21 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <h1>{{ pagename }} for {{ user }}</h1>
+    <p id=numqueries>Total Queries:{{ count }} </p>
+    <div>
+        {% for entry in history %}
+            <p id='query'{{ entry.id }}>  Query No.:<a href="history/query{{ entry.id }}">{{ entry.id }}</a> </p>
+        {% endfor %}
+    </div>
+    <!--
+    <div>
+        {% for entry in history %}
+            <p id=queryid>{{ entry.id }}</p>
+            <p id=username>{{ entry.username }}</p>
+            <p id=querytext>{{ entry.querytext }}</p>
+            <p id=queryresults>{{ entry.queryresults }}</p>
+        {% endfor %}
+    </div>
+    -->
+{% endblock content %}
+
