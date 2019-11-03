@@ -4,7 +4,7 @@
     <p id=numqueries>Total Queries:{{ count }} </p>
     <div>
         {% for entry in history %}
-            <p id='query'{{ entry.id }}>  Query No.:<a href="history/query{{ entry.id }}">{{ entry.id }}</a> </p>
+            <p id='query{{ entry.id }}'>  Query No.:<a href="history/query{{ entry.id }}">{{ entry.id }}</a> </p>
         {% endfor %}
     </div>
     <!--
