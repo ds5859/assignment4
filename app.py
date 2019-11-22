@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 from flask import Flask, render_template, request, url_for, flash, redirect, session
 from forms import RegistrationForm, LoginForm, SpellForm, LoginHistoryForm, SpellHistoryForm
 from flask_bcrypt import Bcrypt
@@ -6,9 +7,9 @@ from flask_wtf.csrf import CSRFProtect
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import subprocess
+import os
 #from subprocess import PIPE
 app = Flask(__name__)
-
 
 bcrypt = Bcrypt(app)
 csrf = CSRFProtect(app)
@@ -57,11 +58,18 @@ class logTable(UserMixin, db.Model):
 #db.drop_all() #for debugging purposes
 db.create_all()
 
+cwd = os.getcwd()
 
 # admin account for gradescope
 if userTable.query.filter_by(username='admin').first() == None:
-    hash_pword = bcrypt.generate_password_hash('Administrator@1').decode('utf-8')
-    admin = userTable(username='admin', password=hash_pword, twofa='12345678901', useradmin=True)
+    #OLD METHOD FOR ASSIGNMENT 3
+    #hash_pword = bcrypt.generate_password_hash('Administrator@1').decode('utf-8')
+    #admin = userTable(username='admin', password=hash_pword, twofa='12345678901', useradmin=True)
+    #NEW METHOD FOR ASSIGNMENT 4: Retrieving info from Docker secrets
+    docker_pword = open(cwd + '/run/secrets/db_admin_pword.txt', 'r').read().strip()
+    docker_twofa = open(cwd + '/run/secrets/db_admin_2fa.txt', 'r').read().strip()
+    hash_pword = bcrypt.generate_password_hash(docker_pword).decode('utf-8')
+    admin = userTable(username='admin', password=hash_pword, twofa=docker_twofa, useradmin=True)
     db.session.add(admin)
     db.session.commit()
 
@@ -71,10 +79,6 @@ if userTable.query.filter_by(username='admin0').first() == None:
     admin0 = userTable(username='admin0', password=hash_pword, twofa=None, useradmin=True)
     db.session.add(admin0)
     db.session.commit()
-# initializing user dictionary with root account
-"""
-users = {'root': {'pword': 'toor', '2fa': 1234567890}} 
-"""
 
 @login_manager.user_loader
 def load_user(id):
@@ -254,8 +258,9 @@ def spell():
             f.close()
 
         #print(inputtext)
+        #spellout = subprocess.Popen(['./a.out', 'userinput.txt', 'wordlist.txt'], stdout=subprocess.PIPE, stderr=subprocess.PIPE) #use if using python3.6
 
-        spellout = subprocess.run(['./a.out', 'userinput.txt', 'wordlist.txt'], check=True, stdout=subprocess.PIPE, universal_newlines=True) #use if using python3.6
+        spellout = subprocess.run(['./a.out', 'userinput.txt', 'wordlist.txt'], check=True, stdout=subprocess.PIPE, universal_newlines=True) #BACKUP #use if using python3.6
         #spellout = subprocess.run(['./a.out', 'userinput.txt', 'wordlist.txt'], capture_output=True, text=True) # stderr=subprocess.DEVNULL
 
         with open('mispelled.txt', 'w') as g:

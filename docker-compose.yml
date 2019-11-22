@@ -1,0 +1,39 @@
+version: '3.7'
+services:
+  spellcheck-application:
+    build: .
+    image: assignment4:latest
+    ports:
+      - "8080:5000"
+    environment:
+      DB_ADMIN_USER: admin
+      DB_ADMIN_PWORD: /run/secrets/db_admin_pword
+      DB_ADMIN_2FA: /run/secrets/db_admin_2fa
+    secrets:
+      - db_admin_pword
+      - db_admin_2fa
+    deploy:
+      mode: replicated
+      replicas: 5
+    
+secrets:
+  db_admin_pword:
+    file: db_admin_pword.txt
+  db_admin_2fa:
+    file: db_admin_2fa.txt
+
+    # stack:
+    #   deploy:
+    #     replicas: 5
+    #     update_config:
+    #       parallelism: 2
+    #       delay: 10s
+    #     restart_policy:
+    #       condition: on-failure
+    #     resources:
+    #       limits:
+    #         cpus: '0.50'
+    #         memory: 50M
+    #       reservations:
+    #         cpus: '0.25'
+    #         memory: 20M

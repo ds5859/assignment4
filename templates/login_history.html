@@ -29,7 +29,7 @@
                 {% for entry in history %}
                         <p id=login{{entry.logid}}>Log Entry: {{ entry.id }}</p>
                         <p>User Name: {{ entry.username }}</p>
-                        <p id=login{{entry.logid}}_time>Logout Time: {{ entry.logintime }}</p>
+                        <p id=login{{entry.logid}}_time>Login Time: {{ entry.logintime }}</p>
                         <p id=logout{{entry.logid}}_time>Logout Time: {{ entry.logouttime if (entry.logouttime) else 'N/A' }}</p>
                 {% endfor %}
             </div>
