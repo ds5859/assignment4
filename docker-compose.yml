@@ -9,31 +9,29 @@ services:
       DB_ADMIN_USER: admin
       DB_ADMIN_PWORD: /run/secrets/db_admin_pword
       DB_ADMIN_2FA: /run/secrets/db_admin_2fa
+      CSRF_KEY: /run/secrets/csrf_key
     secrets:
       - db_admin_pword
       - db_admin_2fa
+      - csrf_key
     deploy:
       mode: replicated
-      replicas: 5
-    
+      replicas: 4
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 50M
+        reservations:
+          cpus: '0.25'
+          memory: 20M
+
 secrets:
   db_admin_pword:
-    file: db_admin_pword.txt
+    external: true
+    #file: ./db_admin_pword.txt
   db_admin_2fa:
-    file: db_admin_2fa.txt
-
-    # stack:
-    #   deploy:
-    #     replicas: 5
-    #     update_config:
-    #       parallelism: 2
-    #       delay: 10s
-    #     restart_policy:
-    #       condition: on-failure
-    #     resources:
-    #       limits:
-    #         cpus: '0.50'
-    #         memory: 50M
-    #       reservations:
-    #         cpus: '0.25'
-    #         memory: 20M
+    external: true
+    #file: ./db_admin_2fa.txt
+  csrf_key:
+    external: true
+    #file: ./csrf_key.txt

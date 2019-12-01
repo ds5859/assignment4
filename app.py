@@ -18,7 +18,11 @@ login_manager = LoginManager(app)
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 login_manager.login_message_category = 'info'
-app.config['SECRET_KEY'] = '4a6542b7886a0d46a36c1bf51f9a11ac720dde847d4b0a9b'
+cwd = os.getcwd()
+csrf_key = open('/run/secrets/csrf_key', 'r').read().strip()
+app.secret_key = csrf_key
+#app.config['SECRET_KEY'] = csrf_key
+#app.config['SECRET_KEY'] = '4a6542b7886a0d46a36c1bf51f9a11ac720dde847d4b0a9b'
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -58,7 +62,7 @@ class logTable(UserMixin, db.Model):
 #db.drop_all() #for debugging purposes
 db.create_all()
 
-cwd = os.getcwd()
+
 
 # admin account for gradescope
 if userTable.query.filter_by(username='admin').first() == None:
@@ -66,8 +70,8 @@ if userTable.query.filter_by(username='admin').first() == None:
     #hash_pword = bcrypt.generate_password_hash('Administrator@1').decode('utf-8')
     #admin = userTable(username='admin', password=hash_pword, twofa='12345678901', useradmin=True)
     #NEW METHOD FOR ASSIGNMENT 4: Retrieving info from Docker secrets
-    docker_pword = open(cwd + '/run/secrets/db_admin_pword.txt', 'r').read().strip()
-    docker_twofa = open(cwd + '/run/secrets/db_admin_2fa.txt', 'r').read().strip()
+    docker_pword = open('/run/secrets/db_admin_pword', 'r').read().strip()
+    docker_twofa = open('/run/secrets/db_admin_2fa', 'r').read().strip()
     hash_pword = bcrypt.generate_password_hash(docker_pword).decode('utf-8')
     admin = userTable(username='admin', password=hash_pword, twofa=docker_twofa, useradmin=True)
     db.session.add(admin)
